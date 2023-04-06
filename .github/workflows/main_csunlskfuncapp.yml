@@ -16,11 +16,11 @@ env:
 
 jobs:
   # set working directory
-  defaults:
-    run:
-      working-directory: ./src/app/jarvis/jarvis
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src/app/jarvis/jarvis
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -50,6 +50,9 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src/app/jarvis/jarvis
     needs: build
     environment:
       name: 'Production'
