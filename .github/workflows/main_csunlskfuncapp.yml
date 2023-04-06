@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./src/app/jarvis/jarvis
+        working-directory: src/app/jarvis/jarvis
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./src/app/jarvis/jarvis
+        working-directory: src/app/jarvis/jarvis
     needs: build
     environment:
       name: 'Production'
