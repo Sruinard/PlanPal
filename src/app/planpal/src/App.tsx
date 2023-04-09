@@ -7,7 +7,12 @@ function App() {
   return (
     <Grid
       id="container"
-      style={{ display: "flex", flexDirection: "column", height: "100vh" }}
+      style={{
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+      }}
     >
       <Grid id="header">
         <h1>PlanPal</h1>
@@ -16,19 +21,28 @@ function App() {
       <Grid
         style={{
           display: "flex",
-          flexDirection: "row",
+          gridTemplateColumns: "10% 80% 10%",
+          gridTemplateAreas: "left content right",
           gap: 10,
           flex: 1,
-          alignContent: "start",
-          justifyContent: "space-between",
         }}
       >
-        <Grid id="content">
-          <Grid id="main">
-            <ChatWindow />
-          </Grid>
+        <Grid style={{ gridArea: "left" }}>// content of the left column</Grid>
+        <Grid
+          style={{
+            gridArea: "content",
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            flex: 1,
+          }}
+        >
+          <ChatWindow />
         </Grid>
-        <Grid id="info"></Grid>
+        <Grid style={{ gridArea: "right" }}>
+          // content of the right column
+        </Grid>
       </Grid>
     </Grid>
   );

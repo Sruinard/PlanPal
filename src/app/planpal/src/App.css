@@ -24,22 +24,3 @@ body {
   display: flex;
 }
 
-#content {
-  display: flex;
-  align-items: stretch;
-  flex-direction: row;
-  padding-top: 12px;
-  gap: 80px;
-}
-
-#main {
-  display: flex;
-  align-items: stretch;
-  flex-direction: column;
-  gap: 10px;
-}
-
-#info {
-  background-color: #c3813f;
-  width: 360px;
-}

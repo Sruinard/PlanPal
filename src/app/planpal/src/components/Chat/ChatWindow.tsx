@@ -1,57 +1,61 @@
-import React from "react";
+import { useState } from "react";
+import { List, Input, Button, Row, Col } from "antd";
+import { IMessage, messageHistory } from "./MessageHistory";
 
-import { Grid } from "@mui/material";
+const { TextArea } = Input;
 
-function ChatWindow() {
+const ChatWindow: React.FC = () => {
+  const [messages, setMessages] = useState<IMessage[]>(messageHistory);
+  const [messageInput, setMessageInput] = useState("");
+
+  const handleSendMessage = () => {
+    const newMessage: IMessage = {
+      content: messageInput,
+      isUser: true,
+    };
+    setMessages([...messages, newMessage]);
+    setMessageInput("");
+  };
+
   return (
-    <Grid
-      style={{
-        paddingTop: 20,
-        gap: 20,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "stretch",
-        height: "100%",
-      }}
-    >
-      {/* Chat content */}
-      <Grid
+    <>
+      <List
+        dataSource={messages}
+        renderItem={(item: IMessage) => <List.Item>{item.content}</List.Item>}
+        style={{ height: "300px", overflow: "auto" }}
+      />
+      <Row
         style={{
-          position: "relative",
-          paddingBottom: "1rem",
-          display: "grid",
-          gridTemplateColumns: "minmax(300px, 800px)",
-          gridTemplateRows: "auto 1fr auto",
-          gridTemplateAreas: "'menu' 'content' 'footer'",
+          display: "flex",
+          alignItems: "center",
           justifyContent: "center",
-          padding: "0 1rem",
-          height: "100%",
         }}
       >
-        <Grid
+        <Col
+          span={16}
           style={{
-            gridArea: "content",
-            overflowY: "auto",
-            overflowX: "hidden",
-            padding: "1rem 0",
-            background: "blue",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
           }}
         >
-          <h1>Chat Content</h1>
-        </Grid>
-
-        {/* FOOTER */}
-        <Grid
-          style={{
-            gridArea: "footer",
-            background: "green",
-          }}
-        >
-          <h1>Chat Footer</h1>
-        </Grid>
-      </Grid>
-    </Grid>
+          <TextArea
+            style={{ minHeight: "100px" }}
+            placeholder="textarea with clear icon"
+            allowClear
+            value={messageInput}
+            onChange={(
+              e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+            ) => setMessageInput(e.target.value)}
+          />
+          <Button onClick={handleSendMessage} style={{ marginTop: "1rem" }}>
+            Send
+          </Button>
+        </Col>
+      </Row>
+    </>
   );
-}
+};
 
 export default ChatWindow;
