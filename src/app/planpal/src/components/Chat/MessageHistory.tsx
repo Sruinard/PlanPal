@@ -9,7 +9,7 @@ export interface IMessage {
 
 // create 10 messages with random lorum ipsum text
 export const messageHistory: IMessage[] = [];
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 20; i++) {
   messageHistory.push({
     content: faker.lorem.paragraph(),
     isUser: Math.random() > 0.5,

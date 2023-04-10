@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { List, Input, Button, Row, Col } from "antd";
 import { IMessage, messageHistory } from "./MessageHistory";
+// import sendIcon from antd
+import { SendOutlined } from "@ant-design/icons";
+// import styled from "styled-components";
 
 const { TextArea } = Input;
 
@@ -18,43 +21,41 @@ const ChatWindow: React.FC = () => {
   };
 
   return (
-    <>
+    <div>
       <List
         dataSource={messages}
         renderItem={(item: IMessage) => <List.Item>{item.content}</List.Item>}
-        style={{ height: "300px", overflow: "auto" }}
+        style={{
+          overflow: "auto",
+          flex: 10,
+          maxHeight: "80vh",
+        }}
       />
       <Row
         style={{
-          display: "flex",
-          alignItems: "center",
+          flex: 2,
           justifyContent: "center",
+          paddingTop: "20px",
+          paddingBottom: "20px",
         }}
       >
-        <Col
-          span={16}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-          }}
+        <TextArea
+          style={{ flex: 1 }}
+          placeholder="textarea with clear icon"
+          allowClear
+          value={messageInput}
+          onChange={(
+            e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+          ) => setMessageInput(e.target.value)}
+        />
+        <Button
+          onClick={handleSendMessage}
+          style={{ display: "flex", alignItems: "center" }}
         >
-          <TextArea
-            style={{ minHeight: "100px" }}
-            placeholder="textarea with clear icon"
-            allowClear
-            value={messageInput}
-            onChange={(
-              e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-            ) => setMessageInput(e.target.value)}
-          />
-          <Button onClick={handleSendMessage} style={{ marginTop: "1rem" }}>
-            Send
-          </Button>
-        </Col>
+          <SendOutlined />
+        </Button>
       </Row>
-    </>
+    </div>
   );
 };
 

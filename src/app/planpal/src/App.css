@@ -3,13 +3,6 @@ body {
   margin: 0px;
 }
 
-#container {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: space-between;
-}
-
 #header {
   background-color: #9c2153;
   width: 100%;
