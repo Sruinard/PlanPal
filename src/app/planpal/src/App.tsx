@@ -18,7 +18,13 @@ function App() {
           gridTemplateAreas: `"content content content content content content right right right"`,
         }}
       >
-        <div style={{ gridArea: "content", margin: "0 20px" }}>
+        <div
+          style={{
+            gridArea: "content",
+            margin: "0 20px",
+          }}
+        >
+          <h2>Chat</h2>
           <ChatWindow />
         </div>
         <div
@@ -26,6 +32,8 @@ function App() {
             gridArea: "right",
             display: "flex",
             flexDirection: "column",
+            backgroundColor: "#FAF9F8",
+            padding: "20px",
           }}
         >
           <Col span={24} style={{ maxHeight: "calc(100vh - 240px)" }}>
