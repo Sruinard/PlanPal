@@ -2,13 +2,17 @@
 name = "jarvis"
 version = "0.1.0"
 description = ""
-authors = ["Stef Ruinard <41334908+Sruinard@users.noreply.github.com>"]
-readme = "README.md"
+authors = ["Stef Ruinard <stefruinard@hotmail.com>"]
+# readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
 azure-functions = "^1.13.3"
-
+semantic-kernel = "^0.2.2.dev0"
+msal = "^1.22.0"
+python-dotenv = "^1.0.0"
+ipykernel = "^6.22.0"
+pytest = "^7.3.1"
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Timeline } from "antd";
+import { Button, Timeline } from "antd";
 import { ISession, ISessionPlanned } from "./PlannedSessions";
 
 const PlannedSessions: React.FC = () => {
@@ -9,7 +9,11 @@ const PlannedSessions: React.FC = () => {
     return { children: session.content };
   });
 
-  return <Timeline items={sessionList} />;
+  return (
+    <>
+      <Timeline items={sessionList} />
+    </>
+  );
 };
 
 export default PlannedSessions;
