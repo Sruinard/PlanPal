@@ -1,7 +1,14 @@
 import azure.functions as func
 import os
+import json
 import logging
 import requests
+from dotenv import load_dotenv
+
+# load environment variables
+
+load_dotenv()
+
 
 import config
 
@@ -40,26 +47,41 @@ def kernel_invoke(req: func.HttpRequest) -> func.HttpResponse:
     )
 
 
-@app.function_name(name="HttpTrigger1")
-@app.route(route="hello")
+@app.function_name(name="speech")
+@app.route(route="speech")  # HTTP Trigger
 def test_function(req: func.HttpRequest) -> func.HttpResponse:
     logging.info("Python HTTP trigger function processed a request.")
 
-    name = req.params.get("name")
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get("name")
+    speech_key = os.environ["SPEECH_KEY"]
+    service_region = os.environ["SERVICE_REGION"]
 
-    if name:
-        return func.HttpResponse(
-            f"Hello, {name}. This HTTP triggered function executed successfully."
+    headers = {
+        "Ocp-Apim-Subscription-Key": speech_key,
+        "Content-Type": "application/x-www-form-urlencoded",
+    }
+
+    response = requests.post(
+        url=f"https://{service_region}.api.cognitive.microsoft.com/sts/v1.0/issuetoken",
+        headers=headers,
+    )
+
+    if response.status_code != 200:
+        raise Exception(
+            "Received unexpected status code {}, exiting.".format(response.status_code)
         )
-    else:
-        return func.HttpResponse(
-            "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-            status_code=200,
-        )
+    
+    access_token = str(response.text)
+
+    return func.HttpResponse(
+        json.dumps({
+            "access_token": access_token,
+            "token_type": "Bearer",
+            "region": service_region,
+        }),
+        mimetype="application/json",
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        },
+    )

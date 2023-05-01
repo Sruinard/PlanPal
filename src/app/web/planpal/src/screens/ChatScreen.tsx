@@ -40,9 +40,14 @@ const footerStyle: React.CSSProperties = {
 };
 
 export default function ChatScreen() {
-  const [voice, setVoice] = React.useState(false);
-  const onChange = (key: string | string[]) => {
+  const [isVoiceControlled, setIsVoiceControlled] = React.useState(false);
+  const onChangeSegmented = (key: string | number) => {
     console.log(key);
+    if (key === "text") {
+      setIsVoiceControlled(false);
+    } else {
+      setIsVoiceControlled(true);
+    }
   };
   return (
     // <Space direction="vertical" style={{ height: "100vh", width: "100%" }}>
@@ -58,6 +63,7 @@ export default function ChatScreen() {
           }}
         >
           <Segmented
+            onChange={onChangeSegmented}
             options={[
               {
                 label: "text",
@@ -73,7 +79,7 @@ export default function ChatScreen() {
           />
         </Row>
         <Row style={{ flex: 4 }}>
-          {voice ? <VoiceControlled /> : <TextControlled />}
+          {isVoiceControlled ? <VoiceControlled /> : <TextControlled />}
         </Row>
       </Footer>
     </Layout>
