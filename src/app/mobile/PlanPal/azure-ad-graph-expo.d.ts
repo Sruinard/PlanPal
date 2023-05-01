@@ -1,0 +1,1 @@
+declare module 'azure-ad-graph-expo';
