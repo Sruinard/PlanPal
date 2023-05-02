@@ -2,10 +2,30 @@ import React from "react";
 import { Input } from "antd";
 import { SendOutlined } from "@ant-design/icons";
 import { Button, Radio, Space, Divider } from "antd";
+import { Dispatch, SetStateAction } from "react";
+import { IMessage } from "./MessageHistory";
+
+interface ITextControlledProps {
+  // setMessage(value: string): void;
+  setMessage: Dispatch<SetStateAction<IMessage>>;
+}
 
 const { TextArea } = Input;
 
-const TextControlled = () => {
+const TextControlled: React.FC<ITextControlledProps> = (props) => {
+  const [textValue, setTextValue] = React.useState("");
+
+  const onChange = (e: any) => {
+    setTextValue(e.target.value);
+  };
+
+  const handleInput = () => {
+    props.setMessage({
+      content: textValue,
+      isUser: true,
+    });
+  };
+
   return (
     <div
       style={{
@@ -20,10 +40,10 @@ const TextControlled = () => {
         {/* <Button type="primary" icon={<SendOutlined />} /> */}
       </div>
       <div style={{ flex: 5 }}>
-        <TextArea autoSize={{ minRows: 1, maxRows: 4 }} />
+        <TextArea autoSize={{ minRows: 1, maxRows: 4 }} onChange={onChange} />
       </div>
       <div style={{ flex: 1 }}>
-        <Button type="primary" icon={<SendOutlined />} />
+        <Button type="primary" icon={<SendOutlined />} onClick={handleInput} />
       </div>
     </div>
   );

@@ -1,17 +1,14 @@
-import React from "react";
-import { Layout, Row, Col, Switch } from "antd";
+import React, { useEffect } from "react";
+import { Layout, Row } from "antd";
 import TextControlled from "../components/Chat/TextControlled";
 import VoiceControlled from "../components/Chat/VoiceControlled";
 import { Segmented } from "antd";
 import { AudioOutlined, CommentOutlined } from "@ant-design/icons";
+import { messageHistory, IMessage } from "../components/Chat/MessageHistory";
+import { Card } from "antd";
+import ChatItem from "../components/Chat/ChatItem";
 
-const { Header, Footer, Sider, Content } = Layout;
-interface Styles {
-  container: React.CSSProperties;
-  header: React.CSSProperties;
-  content: React.CSSProperties;
-  footer: React.CSSProperties;
-}
+const { Header, Footer, Content } = Layout;
 
 const headerStyle: React.CSSProperties = {
   textAlign: "center",
@@ -26,7 +23,9 @@ const contentStyle: React.CSSProperties = {
   lineHeight: "120px",
   height: "calc(100vh - 64px - 128px)",
   backgroundColor: "#ffffff",
-  overflow: "hidden",
+  overflow: "scroll",
+  display: "flex",
+  flexDirection: "column",
 };
 
 const footerStyle: React.CSSProperties = {
@@ -37,10 +36,42 @@ const footerStyle: React.CSSProperties = {
   flexDirection: "column",
   borderWidth: 2,
   padding: 10,
+  borderRadius: "50px 10px 0px 0px",
 };
 
 export default function ChatScreen() {
+  const [skipCallDuringMount, setSkipCallDuringMount] = React.useState(true);
   const [isVoiceControlled, setIsVoiceControlled] = React.useState(false);
+  const [message, setMessage] = React.useState<IMessage>({} as IMessage);
+
+  const [messages, setMessages] = React.useState<IMessage[]>([
+    {
+      isUser: false,
+      content: "Hello, I'm PlanPal! How can I help you today?",
+    },
+  ]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch("http://localhost:7071/api/ping");
+      const data = await res.json();
+      console.log(data.message);
+      setMessages([
+        ...messages,
+        message,
+        {
+          isUser: false,
+          content: data.message,
+        },
+      ]);
+    };
+    if (skipCallDuringMount) {
+      setSkipCallDuringMount(false);
+    } else {
+      fetchData();
+    }
+  }, [message]);
+
   const onChangeSegmented = (key: string | number) => {
     console.log(key);
     if (key === "text") {
@@ -54,7 +85,16 @@ export default function ChatScreen() {
 
     <Layout>
       <Header style={headerStyle}>Header</Header>
-      <Content style={contentStyle}>Content</Content>
+      <Content style={contentStyle}>
+        {messages.map((message, index) => (
+          <ChatItem
+            key={index}
+            message={message}
+            isMine={message.isUser}
+            user={message.isUser ? "user" : "bot"}
+          />
+        ))}
+      </Content>
       <Footer style={footerStyle}>
         <Row
           style={{
@@ -79,7 +119,11 @@ export default function ChatScreen() {
           />
         </Row>
         <Row style={{ flex: 4 }}>
-          {isVoiceControlled ? <VoiceControlled /> : <TextControlled />}
+          {isVoiceControlled ? (
+            <VoiceControlled setMessage={setMessage} />
+          ) : (
+            <TextControlled setMessage={setMessage} />
+          )}
         </Row>
       </Footer>
     </Layout>
