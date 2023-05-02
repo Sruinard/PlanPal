@@ -27,6 +27,7 @@ const App = () => {
           account: accounts[0],
         })
         .then((response) => {
+          console.log(response.accessToken);
           setAccessToken(response.accessToken);
         })
         .catch((error) => {
@@ -36,6 +37,7 @@ const App = () => {
                 scopes,
               })
               .then((response) => {
+                console.log(response.accessToken);
                 setAccessToken(response.accessToken);
               })
               .catch((error) => {
@@ -60,7 +62,10 @@ const App = () => {
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       {isAuthenticated ? (
-        <ChatScreen />
+        <ChatScreen
+          accessToken={accessToken as string}
+          handleSignOut={handleSignOut}
+        />
       ) : (
         <HomeScreen
           isAuthenticated={isAuthenticated}

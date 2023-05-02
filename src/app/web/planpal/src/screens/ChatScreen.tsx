@@ -5,7 +5,7 @@ import VoiceControlled from "../components/Chat/VoiceControlled";
 import { Segmented } from "antd";
 import { AudioOutlined, CommentOutlined } from "@ant-design/icons";
 import { messageHistory, IMessage } from "../components/Chat/MessageHistory";
-import { Card } from "antd";
+import { Card, Button } from "antd";
 import ChatItem from "../components/Chat/ChatItem";
 
 const { Header, Footer, Content } = Layout;
@@ -39,12 +39,21 @@ const footerStyle: React.CSSProperties = {
   borderRadius: "50px 10px 0px 0px",
 };
 
-export default function ChatScreen() {
+interface ChatScreenProps {
+  accessToken: string;
+  handleSignOut: () => void;
+}
+
+export default function ChatScreen(props: ChatScreenProps) {
   const [skipCallDuringMount, setSkipCallDuringMount] = React.useState(true);
   const [isVoiceControlled, setIsVoiceControlled] = React.useState(false);
   const [message, setMessage] = React.useState<IMessage>({} as IMessage);
 
   const [messages, setMessages] = React.useState<IMessage[]>([
+    {
+      isUser: false,
+      content: props.accessToken,
+    },
     {
       isUser: false,
       content: "Hello, I'm PlanPal! How can I help you today?",
@@ -84,7 +93,12 @@ export default function ChatScreen() {
     // <Space direction="vertical" style={{ height: "100vh", width: "100%" }}>
 
     <Layout>
-      <Header style={headerStyle}>Header</Header>
+      <Header style={headerStyle}>
+        <Row>
+          <h1>PlanPal</h1>
+          <Button onClick={props.handleSignOut}>Sign out</Button>
+        </Row>
+      </Header>
       <Content style={contentStyle}>
         {messages.map((message, index) => (
           <ChatItem
