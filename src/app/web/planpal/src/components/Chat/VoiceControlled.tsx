@@ -38,7 +38,7 @@ const VoiceControlled: React.FC<IVoiceControlledProps> = (props) => {
       }
     };
     fetchData();
-  }, []);
+  }, [props]);
 
   const sttFromMic = async () => {
     setIsCapturing(true);

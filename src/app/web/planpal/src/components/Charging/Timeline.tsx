@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Timeline } from "antd";
+import { Timeline } from "antd";
 import { ISession, ISessionPlanned } from "./PlannedSessions";
 
 const PlannedSessions: React.FC = () => {

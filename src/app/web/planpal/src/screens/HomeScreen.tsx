@@ -1,19 +1,3 @@
-import { PublicClientApplication, Configuration } from "@azure/msal-browser";
-import { MsalProvider, useMsal, useIsAuthenticated } from "@azure/msal-react";
-import { Button } from "antd";
-import React, { useEffect, useState } from "react";
-
-const msalConfig: Configuration = {
-  auth: {
-    clientId: process.env.REACT_APP_GRAPH_CLIENT_ID as string,
-    // authority:
-    //   "https://login.microsoftonline.com/ff010600-2503-4162-a7cf-094c633adfce",
-    redirectUri: "http://localhost:3000",
-  },
-};
-
-const scopes = process.env.REACT_APP_GRAPH_SCOPES!.split(",");
-
 interface IHomeScreenProps {
   isAuthenticated: boolean;
   accessToken: string | null;

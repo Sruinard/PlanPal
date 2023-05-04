@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { List, Input, Button, Row, Col } from "antd";
+import { List, Input, Button, Row } from "antd";
 import { IMessage, messageHistory } from "./MessageHistory";
 // import sendIcon from antd
 import { SendOutlined } from "@ant-design/icons";

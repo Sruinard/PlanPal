@@ -4,8 +4,8 @@ import TextControlled from "../components/Chat/TextControlled";
 import VoiceControlled from "../components/Chat/VoiceControlled";
 import { Segmented } from "antd";
 import { AudioOutlined, CommentOutlined } from "@ant-design/icons";
-import { messageHistory, IMessage } from "../components/Chat/MessageHistory";
-import { Card, Button } from "antd";
+import { IMessage } from "../components/Chat/MessageHistory";
+import { Button } from "antd";
 import ChatItem from "../components/Chat/ChatItem";
 
 const { Header, Footer, Content } = Layout;
@@ -75,7 +75,7 @@ export default function ChatScreen(props: ChatScreenProps) {
     } else {
       fetchData();
     }
-  }, [message]);
+  }, [message, messages, skipCallDuringMount]);
 
   const onChangeSegmented = (key: string | number) => {
     console.log(key);
