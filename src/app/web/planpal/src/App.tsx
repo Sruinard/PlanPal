@@ -1,7 +1,6 @@
 import { PublicClientApplication, Configuration } from "@azure/msal-browser";
 import { MsalProvider, useMsal, useIsAuthenticated } from "@azure/msal-react";
-import { Button } from "antd";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import HomeScreen from "./screens/HomeScreen";
 import ChatScreen from "./screens/ChatScreen";
 
@@ -31,7 +30,7 @@ const App = () => {
           setAccessToken(response.accessToken);
         })
         .catch((error) => {
-          if (error.name == "InteractionRequiredAuthError") {
+          if (error.name === "InteractionRequiredAuthError") {
             instance
               .acquireTokenPopup({
                 scopes,
