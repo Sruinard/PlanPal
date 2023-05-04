@@ -1,0 +1,12 @@
+{
+    "schema": 1,
+    "type": "completion",
+    "description": "Formats the chat information as a json object which can be used by our API to add a new calendar event.",
+    "completion": {
+      "max_tokens": 256,
+      "temperature": 0.0,
+      "top_p": 1.0,
+      "presence_penalty": 0.0,
+      "frequency_penalty": 0.0
+    }
+  }

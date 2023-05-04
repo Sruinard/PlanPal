@@ -1,0 +1,12 @@
+{
+    "schema": 1,
+    "type": "completion",
+    "description": "Proposes three suitable meeting times based on chat history and current time",
+    "completion": {
+      "max_tokens": 256,
+      "temperature": 0.0,
+      "top_p": 1.0,
+      "presence_penalty": 0.0,
+      "frequency_penalty": 0.0
+    }
+  }

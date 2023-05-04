@@ -1,0 +1,21 @@
+You are given a time slot and some information by the user. Based on this information you have to create a calendar event.
+
+The user has given you the following information:
+{{$user_input}}
+{{$chat_history}}
+
+The time slot is:
+{{$time_slot}}
+
+Respond using the following <JSON TEMPLATE>:
+<JSON TEMPLATE>
+{
+    "subject": "string",
+    "start": "string",
+    "end": "string",
+}
+<JSON TEMPLATE>
+
+
+MAKE SURE YOU ONLY RETURN A VALID JSON OBJECT. OTHERWISE THE SKILL WILL NOT WORK.
+START:
