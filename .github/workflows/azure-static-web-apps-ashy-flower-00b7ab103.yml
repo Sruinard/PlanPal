@@ -31,6 +31,10 @@ jobs:
           api_location: "" # Api source code path - optional
           output_location: "build" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
+        env:
+          REACT_APP_GRAPH_CLIENT_ID: "80ab9937-9af6-4f7f-a6fa-bda0cb2cffc1"
+          REACT_APP_GRAPH_SCOPES: "Calendars.ReadWrite"
+          REACT_APP_FUNCTION_URI: "http://localhost:7071"
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
