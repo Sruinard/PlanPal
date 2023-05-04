@@ -52,10 +52,6 @@ export default function ChatScreen(props: ChatScreenProps) {
   const [messages, setMessages] = React.useState<IMessage[]>([
     {
       isUser: false,
-      content: props.accessToken,
-    },
-    {
-      isUser: false,
       content: "Hello, I'm PlanPal! How can I help you today?",
     },
   ]);

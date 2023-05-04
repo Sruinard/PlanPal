@@ -3,3 +3,9 @@
 # Manually managing azure-functions-worker may cause unexpected issues
 
 azure-functions
+msal
+ipykernel
+ipython
+semantic-kernel
+python-dotenv
+requests
