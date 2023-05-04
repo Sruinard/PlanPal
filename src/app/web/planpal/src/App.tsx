@@ -7,7 +7,7 @@ import ChatScreen from "./screens/ChatScreen";
 const msalConfig: Configuration = {
   auth: {
     clientId: process.env.REACT_APP_GRAPH_CLIENT_ID as string,
-    redirectUri: "http://localhost:3000",
+    redirectUri: process.env.REDIRECT_URL as string,
   },
 };
 
