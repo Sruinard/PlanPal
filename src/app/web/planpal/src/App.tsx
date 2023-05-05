@@ -47,10 +47,23 @@ const App = () => {
     }
   }, [isAuthenticated, accessToken, accounts, instance]);
 
+  const loginRequest = {
+    scopes: ["Calendars.ReadWrite"],
+  };
+
   const handleSignIn = () => {
-    instance.loginPopup({
-      scopes,
-    });
+    instance
+      .loginRedirect(loginRequest)
+      .then((response) => {
+        console.log("Signed in with redirect");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    // instance.loginPopup({
+    //   scopes,
+    // });
   };
 
   const handleSignOut = () => {
