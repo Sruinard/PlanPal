@@ -1,5 +1,16 @@
-import { PublicClientApplication, Configuration } from "@azure/msal-browser";
-import { MsalProvider, useMsal, useIsAuthenticated } from "@azure/msal-react";
+import {
+  PublicClientApplication,
+  Configuration,
+  InteractionType,
+} from "@azure/msal-browser";
+import {
+  MsalProvider,
+  useMsal,
+  useIsAuthenticated,
+  AuthenticatedTemplate,
+  UnauthenticatedTemplate,
+  MsalAuthenticationTemplate,
+} from "@azure/msal-react";
 import { useEffect, useState } from "react";
 import HomeScreen from "./screens/HomeScreen";
 import ChatScreen from "./screens/ChatScreen";
@@ -73,19 +84,20 @@ const App = () => {
 
   return (
     <div style={{ display: "flex", height: "100vh" }}>
-      {isAuthenticated ? (
-        <ChatScreen
-          accessToken={accessToken as string}
-          handleSignOut={handleSignOut}
-        />
-      ) : (
+      <UnauthenticatedTemplate>
         <HomeScreen
           isAuthenticated={isAuthenticated}
           accessToken={accessToken}
           handleSignIn={handleSignIn}
           handleSignOut={handleSignOut}
         />
-      )}
+      </UnauthenticatedTemplate>
+      <AuthenticatedTemplate>
+        <ChatScreen
+          accessToken={accessToken as string}
+          handleSignOut={handleSignOut}
+        />
+      </AuthenticatedTemplate>
     </div>
   );
 };
@@ -94,7 +106,9 @@ const AppWithProvider = () => {
   const msalInstance = new PublicClientApplication(msalConfig);
   return (
     <MsalProvider instance={msalInstance}>
-      <App />
+      <MsalAuthenticationTemplate interactionType={InteractionType.Redirect}>
+        <App />
+      </MsalAuthenticationTemplate>
     </MsalProvider>
   );
 };
