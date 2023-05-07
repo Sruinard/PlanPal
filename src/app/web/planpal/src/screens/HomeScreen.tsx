@@ -7,7 +7,7 @@ interface IHomeScreenProps {
 
 const HomeScreen = (props: IHomeScreenProps) => {
   return (
-    <div>
+    <div style={{ maxHeight: "100vh" }}>
       <h1>
         {props.isAuthenticated ? "You are signed in" : "You are signed out"}
       </h1>

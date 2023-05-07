@@ -1,0 +1,8 @@
+I want to make a recipe for using the following input:
+
+user_input: {{$user_input}}
+
+Be creative and think about how you can use the provided cuisine to make a recipe.
+cuisine is a style of cooking characterized by distinctive ingredients, techniques and dishes, and usually associated with a specific culture or geographic region.
+
+Generate your recipe here:

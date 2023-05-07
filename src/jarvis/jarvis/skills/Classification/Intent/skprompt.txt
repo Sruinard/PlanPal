@@ -1,0 +1,17 @@
+This is a prompt to score the user input and select the correct skill and function name. The intent is to classify a chat dialogue into one and only one of the given [SKILLS AND FUNCTIONS]:
+You have to use [JSON TEMPLATE] as a return value
+
+[JSON TEMPLATE]
+{
+    "skill_name": "<insert_skill_name>",
+    "function_name": "<insert_function_name>"
+}
+[END JSON TEMPLATE]
+
+[SKILLS AND FUNCTIONS]
+{{$available_skills}}
+[END SKILLS AND FUNCTIONS]
+
+intent to classify: {{$user_input}}
+
+RESULT:

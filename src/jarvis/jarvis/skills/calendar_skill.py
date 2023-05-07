@@ -13,7 +13,8 @@ class CalendarSkill:
         """Get calendar events from the MSFT Graph API"""
 
         variables = context.variables
-        event_func = context.skills.get_function("Calendar", "events_filter")
+        event_func = context.skills.get_function(
+            "CalendarSkill", "SemanticTimeToGraphFilter")
 
         filters = await event_func.invoke_with_vars_async(input=variables)
         print(filters.result)
@@ -28,7 +29,8 @@ class CalendarSkill:
 
     @sk_function(description="Propose meeting times based on a list of events and the current time")
     async def propose_meeting_time(self, context: sk.SKContext) -> str:
-        event_func = context.skills.get_function("Calendar", "events_proposal")
+        event_func = context.skills.get_function(
+            "CalendarSkill", "ProposedMeetingTimes")
 
         suitable_meeting_times = await event_func.invoke_with_vars_async(input=context.variables)
         return suitable_meeting_times.result
@@ -36,7 +38,7 @@ class CalendarSkill:
     @sk_function(description="Create a calendar event")
     async def create_calendar_event(self, context: sk.SKContext) -> str:
         format_meeting_func = context.skills.get_function(
-            "Calendar", "format_meeting")
+            "CalendarSkill", "FormatMeetingForCalendarEvent")
 
         meeting = await format_meeting_func.invoke_with_vars_async(input=context.variables)
         meeting = json.loads(meeting.result)

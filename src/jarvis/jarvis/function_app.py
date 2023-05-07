@@ -8,12 +8,12 @@ from dotenv import load_dotenv
 from semantic_kernel.ai.open_ai import AzureTextCompletion
 import semantic_kernel as sk
 
-kernel = sk.Kernel()
+# kernel = sk.Kernel()
 
 deployment, api_key, endpoint = sk.azure_openai_settings_from_dot_env()
 
-kernel.config.add_text_backend(
-    "dv", AzureTextCompletion(deployment, endpoint, api_key))
+# kernel.config.add_text_backend(
+#     "dv", AzureTextCompletion(deployment, endpoint, api_key))
 
 # load environment variables
 
@@ -43,7 +43,7 @@ def ping_invoke(req: func.HttpRequest) -> func.HttpResponse:
 @app.function_name(name="jarvis")
 @app.route(route="kernel")  # HTTP Trigger
 def kernel_invoke(req: func.HttpRequest) -> func.HttpResponse:
-    # token = req.headers.get("Authorization", "No token found")
+    token = req.headers.get("Authorization", "No token found")
     # msft_graph_url = f"https://graph.microsoft.com/v1.0/me/events"
 
     # # create a header with the access token and content type
@@ -59,16 +59,16 @@ def kernel_invoke(req: func.HttpRequest) -> func.HttpResponse:
     # )
     # retrieved_events = out.json()
     # retrieved_events
-    sk_prompt = """
-    {{$input}}
+    # sk_prompt = """
+    # {{$input}}
 
-    Give me a recipe based on the kitchen provided above. If included.
-    """
+    # Give me a recipe based on the kitchen provided above. If included.
+    # """
 
-    tldr_function = kernel.create_semantic_function(
-        sk_prompt, max_tokens=200, temperature=0, top_p=0.5)
+    # tldr_function = kernel.create_semantic_function(
+    #     sk_prompt, max_tokens=200, temperature=0, top_p=0.5)
 
-    summary = tldr_function(text)
+    # summary = tldr_function(text)
 
     return func.HttpResponse(
         f"Succesfully connected to the kernel. endpoint: {config.JarvisConfig.AZURE_OPENAI_ENDPOINT}, token: {token}"

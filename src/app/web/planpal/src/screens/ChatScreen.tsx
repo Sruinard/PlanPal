@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Layout, Row } from "antd";
 import TextControlled from "../components/Chat/TextControlled";
 import VoiceControlled from "../components/Chat/VoiceControlled";
@@ -45,24 +45,20 @@ interface ChatScreenProps {
 }
 
 export default function ChatScreen(props: ChatScreenProps) {
-  const [skipCallDuringMount, setSkipCallDuringMount] = React.useState(true);
+  // const [skipCallDuringMount, setSkipCallDuringMount] = React.useState(true);
+  const skipCallDuringMount = useRef(true);
   const [isVoiceControlled, setIsVoiceControlled] = React.useState(false);
   const [message, setMessage] = React.useState<IMessage>({} as IMessage);
 
-  const [messages, setMessages] = React.useState<IMessage[]>([
-    {
-      isUser: false,
-      content: "Hello, I'm PlanPal! How can I help you today?",
-    },
-  ]);
+  const [messages, setMessages] = React.useState<IMessage[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const res = await fetch("http://localhost:7071/api/ping");
       const data = await res.json();
       console.log(data.message);
-      setMessages([
-        ...messages,
+      setMessages((prevMessages) => [
+        ...prevMessages,
         message,
         {
           isUser: false,
@@ -70,13 +66,13 @@ export default function ChatScreen(props: ChatScreenProps) {
         },
       ]);
     };
-    if (skipCallDuringMount) {
-      setSkipCallDuringMount(false);
+    if (skipCallDuringMount.current) {
+      skipCallDuringMount.current = false;
+      return;
     } else {
       fetchData();
     }
-  }, [message, messages, skipCallDuringMount]);
-
+  }, [message, setMessages, skipCallDuringMount]);
   const onChangeSegmented = (key: string | number) => {
     console.log(key);
     if (key === "text") {
@@ -86,57 +82,56 @@ export default function ChatScreen(props: ChatScreenProps) {
     }
   };
   return (
-    // <Space direction="vertical" style={{ height: "100vh", width: "100%" }}>
-
-    <Layout>
-      <Header style={headerStyle}>
-        <Row>
-          <h1>PlanPal</h1>
-          <Button onClick={props.handleSignOut}>Sign out</Button>
-        </Row>
-      </Header>
-      <Content style={contentStyle}>
-        {messages.map((message, index) => (
-          <ChatItem
-            key={index}
-            message={message}
-            isMine={message.isUser}
-            user={message.isUser ? "user" : "bot"}
-          />
-        ))}
-      </Content>
-      <Footer style={footerStyle}>
-        <Row
-          style={{
-            flex: 1,
-            justifyContent: "center",
-          }}
-        >
-          <Segmented
-            onChange={onChangeSegmented}
-            options={[
-              {
-                label: "text",
-                value: "text",
-                icon: <CommentOutlined />,
-              },
-              {
-                label: "speech",
-                value: "speech",
-                icon: <AudioOutlined />,
-              },
-            ]}
-          />
-        </Row>
-        <Row style={{ flex: 4 }}>
-          {isVoiceControlled ? (
-            <VoiceControlled setMessage={setMessage} />
-          ) : (
-            <TextControlled setMessage={setMessage} />
-          )}
-        </Row>
-      </Footer>
-    </Layout>
-    // </Space>
+    <div style={{ maxHeight: "100vh" }}>
+      <Layout>
+        <Header style={headerStyle}>
+          <Row>
+            <h1>PlanPal</h1>
+            <Button onClick={props.handleSignOut}>Sign out</Button>
+          </Row>
+        </Header>
+        <Content style={contentStyle}>
+          {messages.map((message, index) => (
+            <ChatItem
+              key={index}
+              message={message}
+              isMine={message.isUser}
+              user={message.isUser ? "user" : "bot"}
+            />
+          ))}
+        </Content>
+        <Footer style={footerStyle}>
+          <Row
+            style={{
+              flex: 1,
+              justifyContent: "center",
+            }}
+          >
+            <Segmented
+              onChange={onChangeSegmented}
+              options={[
+                {
+                  label: "text",
+                  value: "text",
+                  icon: <CommentOutlined />,
+                },
+                {
+                  label: "speech",
+                  value: "speech",
+                  icon: <AudioOutlined />,
+                },
+              ]}
+            />
+          </Row>
+          <Row style={{ flex: 4 }}>
+            {isVoiceControlled ? (
+              <VoiceControlled setMessage={setMessage} />
+            ) : (
+              <TextControlled setMessage={setMessage} />
+            )}
+          </Row>
+        </Footer>
+      </Layout>
+    </div>
   );
 }
