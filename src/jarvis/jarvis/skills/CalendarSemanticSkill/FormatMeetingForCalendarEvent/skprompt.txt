@@ -1,9 +1,9 @@
 You are given the most recent user input and additional historical information from a chat dialogue.
-Based on this information you have to create a calendar event by returning the <JSON TEMPLATE>.
+Based on this information you have to create a calendar event by filling in the [JSON TEMPLATE].
 the start and end time of the event should be in the following format:
 YYYY-MM-DDTHH:MM:SSZ
 
-use the information provided by the user and the chat history to create the <JSON TEMPLATE> and return it.
+use the information provided by the user and the chat history to fill in the [JSON TEMPLATE] and return only the filled in [JSON TEMPLATE].
 
 The user has given you the following information:
 {{$user_input}}
@@ -19,7 +19,7 @@ Day of the week:
 
 date_format: YYYY-MM-DDTHH:MM:SSZ
 
-Respond using the following <JSON TEMPLATE>:
+[JSON TEMPLATE]:
 {
     "subject": "<insert subject>",
     "start": "<insert date_format>",
@@ -28,4 +28,4 @@ Respond using the following <JSON TEMPLATE>:
 
 
 MAKE SURE YOU ONLY RETURN A VALID JSON OBJECT. OTHERWISE THE SKILL WILL NOT WORK.
-START:
+[JSON TEMPLATE]:

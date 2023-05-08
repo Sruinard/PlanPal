@@ -44,18 +44,72 @@ interface ChatScreenProps {
   handleSignOut: () => void;
 }
 
+interface UserInput {
+  // Define the expected shape of the user input
+  name: string;
+  email: string;
+  message: string;
+  user_input: string;
+}
+
+const submitUserInput = async (userInput: UserInput, token: string) => {
+  // Define the URL and authorization token
+  // const url = `http://localhost:7071/api/kernel?user_input=${userInput.user_input}&token=${token}`;
+  // const url = "http://127.0.0.1:7071/api/ping";
+  const url = `${process.env.REACT_APP_FUNCTION_URI}/api/kernel`;
+
+  // Define the request options, including the authorization header and body
+  const requestOptions: RequestInit = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(userInput),
+  };
+
+  console.log("Option created");
+  console.log(JSON.stringify(userInput));
+
+  // Send the request and handle the response
+  const response = await fetch(url, requestOptions);
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
+  }
+  const responseData = await response.json();
+  // Do something with the response data, if needed
+  console.log(responseData);
+  return responseData;
+};
+
 export default function ChatScreen(props: ChatScreenProps) {
   // const [skipCallDuringMount, setSkipCallDuringMount] = React.useState(true);
   const skipCallDuringMount = useRef(true);
   const [isVoiceControlled, setIsVoiceControlled] = React.useState(false);
-  const [message, setMessage] = React.useState<IMessage>({} as IMessage);
+  const [message, setMessage] = React.useState<IMessage>({
+    content: "Hey, how are you?",
+    isUser: true,
+  } as IMessage);
 
   const [messages, setMessages] = React.useState<IMessage[]>([]);
 
+  // create a post request with user_input in the body and add an authorization token as a header
+
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch("http://localhost:7071/api/ping");
-      const data = await res.json();
+      // const res = await fetch("http://localhost:7071/api/ping");
+      // const data = await res.json();
+      console.log("====================");
+      console.log(props.accessToken);
+      const data = await submitUserInput(
+        {
+          name: "stef",
+          email: "s",
+          message: message.content,
+          user_input: message.content,
+        },
+        props.accessToken
+      );
       console.log(data.message);
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -72,7 +126,8 @@ export default function ChatScreen(props: ChatScreenProps) {
     } else {
       fetchData();
     }
-  }, [message, setMessages, skipCallDuringMount]);
+  }, [message, setMessages, skipCallDuringMount, props.accessToken]);
+
   const onChangeSegmented = (key: string | number) => {
     console.log(key);
     if (key === "text") {

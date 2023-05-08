@@ -4,36 +4,83 @@ from semantic_kernel.core_skills.time_skill import TimeSkill
 from skills.calendar_skill import CalendarSkill
 import json
 
-SKILLS_SUBDIRS = ['Classification', 'CalendarSemanticSkill',
-                  'Chat', 'CookingSkill', 'AllInformationPresentSkill']
+import json
+import semantic_kernel as sk
+from semantic_kernel.ai.open_ai import AzureTextCompletion, AzureTextEmbedding
 
-ALLOWED_SKILLS = ["Classification", "Chat",
-                  "CookingSkill", "AllInformationPresentSkill", "calendar"]
+
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
+LOGGER = logging.getLogger(__name__)
+
+SKILLS_SUBDIRS = [
+    "Classification",
+    "CalendarSemanticSkill",
+    "Chat",
+    "CookingSkill",
+    "AllInformationPresentSkill",
+]
+
+ALLOWED_SKILLS = [
+    "Classification",
+    "Chat",
+    "CookingSkill",
+    "AllInformationPresentSkill",
+    "calendar",
+]
+
+
+def get_kernel():
+    kernel = sk.create_kernel()
+    EMBEDDING_MODEL_NAME = "text-embedding-ada-002"
+
+    # Prepare AzureOpenAI backend using credentials stored in the `.env` file
+    deployment, api_key, endpoint = sk.azure_openai_settings_from_dot_env()
+    kernel.config.add_text_backend(
+        "dv",
+        AzureTextCompletion(
+            deployment_name=deployment, endpoint=endpoint, api_key=api_key
+        ),
+    )
+    kernel.config.add_embedding_backend(
+        "ada",
+        AzureTextEmbedding(
+            deployment_name=EMBEDDING_MODEL_NAME, api_key=api_key, endpoint=endpoint
+        ),
+    )
+
+    kernel.register_memory(memory=sk.memory.VolatileMemoryStore())
+    kernel.import_skill(sk.core_skills.TextMemorySkill())
+    return kernel
 
 
 def init_kernel_with_functions(kernel: Kernel):
     # add core skills
     kernel.import_skill(TimeSkill(), "time")
-    kernel.import_skill(skill_instance=CalendarSkill(),
-                        skill_name="calendar")
+    kernel.import_skill(skill_instance=CalendarSkill(), skill_name="calendar")
 
     skill_directory_name = "./skills"
     # add semantic skills
     for skill_dir in SKILLS_SUBDIRS:
-        kernel.import_semantic_skill_from_directory(
-            skill_directory_name, skill_dir)
+        kernel.import_semantic_skill_from_directory(skill_directory_name, skill_dir)
 
     # add NativeXSemantic skills
 
 
 def get_all_skills(kernel: sk.Kernel):
-    all_skills = [semantic_skill for semantic_skill in kernel.skills.get_functions_view()._semantic_functions.items(
-    )] + [native_skill for native_skill in kernel.skills.get_functions_view()._native_functions.items()]
+    all_skills = [
+        semantic_skill
+        for semantic_skill in kernel.skills.get_functions_view()._semantic_functions.items()
+    ] + [
+        native_skill
+        for native_skill in kernel.skills.get_functions_view()._native_functions.items()
+    ]
 
     available_skills = ""
 
     for skill_name, skill_functions in all_skills:
-
         # skip the calendar semantic skill as these are part of the native skill
         if skill_name not in ALLOWED_SKILLS:
             continue
@@ -44,17 +91,20 @@ def get_all_skills(kernel: sk.Kernel):
             available_skills += f"  description: {function.description}\n"
             available_skills += "\n"
 
+    LOGGER.info(available_skills)
     return available_skills
 
 
 async def chat(user_input: str, context: sk.SKContext):
     context.variables["available_skills"] = get_all_skills(context)
     context.variables["user_input"] = user_input
-    context.variables["chat_history"] = context.variables.get(
-        "chat_history")[1] + user_input + "\n"
+    context.variables["chat_history"] = (
+        context.variables.get("chat_history")[1] + user_input + "\n"
+    )
 
     classified_func = await context.skills.get_function(
-        "Classification", "Intent").invoke_async(context=context)
+        "Classification", "Intent"
+    ).invoke_async(context=context)
 
     classified_skill_and_func = json.loads(classified_func.result)
     print(f"classified skill and func: {classified_skill_and_func}")
@@ -62,18 +112,23 @@ async def chat(user_input: str, context: sk.SKContext):
 
     try:
         func_to_execute = context.skills.get_function(
-            classified_skill_and_func["skill_name"], classified_skill_and_func["function_name"])
+            classified_skill_and_func["skill_name"],
+            classified_skill_and_func["function_name"],
+        )
 
         context.variables["function_name"] = classified_skill_and_func["function_name"]
         context.variables["function_params"] = ",".join(
-            [param.name for param in func_to_execute.describe().parameters])
-        context.variables["function_description"] = func_to_execute.describe(
-        ).description
+            [param.name for param in func_to_execute.describe().parameters]
+        )
+        context.variables[
+            "function_description"
+        ] = func_to_execute.describe().description
 
-        context.variables["available_info"] = json.dumps(
-            context._variables._variables)
+        context.variables["available_info"] = json.dumps(context._variables._variables)
 
-        function_info = await context.skills.get_function("AllInformationPresentSkill", "Validation").invoke_async(context=context)
+        function_info = await context.skills.get_function(
+            "AllInformationPresentSkill", "Validation"
+        ).invoke_async(context=context)
         function_info = function_info.result
         function_info_json = json.loads(function_info)
 
@@ -99,8 +154,12 @@ async def chat(user_input: str, context: sk.SKContext):
         pass
 
     if classified_skill_and_func["skill_name"] != "Chat":
-        context.variables["user_input"] = "Rewrite the latest answer to sound more like a human friendly chatbot"
-        answer = await context.skills.get_function("Chat", "ChatBot").invoke_async(context=context)
+        context.variables[
+            "user_input"
+        ] = "Rewrite the latest answer to sound more like a human friendly chatbot"
+        answer = await context.skills.get_function("Chat", "ChatBot").invoke_async(
+            context=context
+        )
         answer = answer.result
         context["chat_history"] += f"\nUser:> {user_input}\nChatBot:> {answer}\n"
     return answer, context
