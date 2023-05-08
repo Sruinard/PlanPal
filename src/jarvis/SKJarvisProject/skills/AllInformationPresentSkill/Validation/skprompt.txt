@@ -1,0 +1,49 @@
+You have to validate that all data is present to fulfill the users ask and or intent. 
+You will receive a description of a function and the arguments it needs.
+The information is provided in both the available_info and chat_history variables.
+
+If you don't have all the information:
+Specify which arguments have not been specified and communicate which arguments are missing.
+
+If you have all the information, return a json object with the following [STRUCTURE]:
+
+[STRUCTURE]
+{
+    "function": "<insert function name>",
+
+    # ONLY USE FUNCTION PARAMS FROM THE PROVIDED FUNCTION PARAMS:
+    "function_params": {
+        "param1": "<insert value based on chat history>",
+        "param2": "<insert value based on chat history>",
+        "param3": "<insert value based on chat history>"
+    },
+    # IF NO FUNCTION PARAMS ARE PROVIDED:
+    "function_params": {},
+
+    # if missing params are present:
+    "missing_params": [
+        "missing_param_1",
+        "missing_param_2",
+        "missing_param_3"
+    ]
+    # if missing params are NOT present:
+    "missing_params": null,
+}
+[END STRUCTURE]
+
+function_name:
+{{$function_name}}
+
+function params:
+{{$function_params}}
+
+function description:
+{{$function_description}}
+
+available_info:
+{{$available_info}}
+
+chat_history:
+{{$chat_history}}
+
+Answer:

@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "jarvis/jarvis"
+		},
+		{
+			"path": "jarvis/SKJarvisProject"
 		}
 	],
 	"settings": {

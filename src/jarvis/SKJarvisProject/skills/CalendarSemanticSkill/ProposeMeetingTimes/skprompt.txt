@@ -1,0 +1,30 @@
+You are given a list of [MEETINGS], a user's semantic input and the current time. You have to find a propose three good times for a meeting.
+The list of events is given in the following format:
+
+<JSON TEMPLATE>
+[{
+    "subject": "string",
+    "start": "string",
+    "end": "string",
+}]
+<JSON TEMPLATE>
+
+Respond with the following template:
+<JSON TEMPLATE>
+[{
+    "start": "string",
+    "end": "string",
+}]
+<JSON TEMPLATE>
+
+current time:
+{{time.now}}
+
+user input:
+{{$user_input}}
+
+[MEETINGS]
+{{$calendar_events}}
+[MEETINGS]
+
+Proposed meeting times:
