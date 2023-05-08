@@ -6,6 +6,6 @@ azure-functions
 msal
 ipykernel
 ipython
-semantic-kernel
+semantic-kernel==0.2.6.dev0
 python-dotenv
 requests

@@ -6,7 +6,10 @@ import json
 
 import json
 import semantic_kernel as sk
-from semantic_kernel.ai.open_ai import AzureTextCompletion, AzureTextEmbedding
+from semantic_kernel.connectors.ai.open_ai import (
+    AzureTextCompletion,
+    AzureTextEmbedding,
+)
 
 
 import logging
@@ -33,18 +36,18 @@ ALLOWED_SKILLS = [
 
 
 def get_kernel():
-    kernel = sk.create_kernel()
+    kernel = sk.Kernel()
     EMBEDDING_MODEL_NAME = "text-embedding-ada-002"
 
     # Prepare AzureOpenAI backend using credentials stored in the `.env` file
     deployment, api_key, endpoint = sk.azure_openai_settings_from_dot_env()
-    kernel.config.add_text_backend(
+    kernel.config.add_text_completion_service(
         "dv",
         AzureTextCompletion(
             deployment_name=deployment, endpoint=endpoint, api_key=api_key
         ),
     )
-    kernel.config.add_embedding_backend(
+    kernel.config.add_text_embedding_generation_service(
         "ada",
         AzureTextEmbedding(
             deployment_name=EMBEDDING_MODEL_NAME, api_key=api_key, endpoint=endpoint
@@ -105,6 +108,9 @@ async def chat(user_input: str, context: sk.SKContext):
     classified_func = await context.skills.get_function(
         "Classification", "Intent"
     ).invoke_async(context=context)
+
+    LOGGER.fatal(f"RESULT: {classified_func}")
+    LOGGER.fatal(f"RESULT: {classified_func.result}")
 
     classified_skill_and_func = json.loads(classified_func.result)
     print(f"classified skill and func: {classified_skill_and_func}")
