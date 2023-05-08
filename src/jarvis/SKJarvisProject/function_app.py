@@ -34,7 +34,7 @@ app = func.FunctionApp()
 
 
 @app.function_name(name="HttpTrigger1")
-@app.route(route="hello")
+@app.route(route="hello", auth_level=func.AuthLevel.ANONYMOUS)
 def test_function(req: func.HttpRequest) -> func.HttpResponse:
     logging.info("Python HTTP trigger function processed a request.")
 
@@ -59,7 +59,7 @@ def test_function(req: func.HttpRequest) -> func.HttpResponse:
 
 
 @app.function_name(name="ping")
-@app.route(route="ping")  # HTTP Trigger
+@app.route(route="ping", auth_level=func.AuthLevel.ANONYMOUS)  # HTTP Trigger
 def ping_invoke(req: func.HttpRequest) -> func.HttpResponse:
     headers = {
         "Access-Control-Allow-Origin": "*",
@@ -80,7 +80,7 @@ def ping_invoke(req: func.HttpRequest) -> func.HttpResponse:
 
 
 @app.function_name(name="jarvis")
-@app.route(route="kernel")  # HTTP Trigger
+@app.route(route="kernel", auth_level=func.AuthLevel.ANONYMOUS)  # HTTP Trigger
 async def kernel_invoke(req: func.HttpRequest) -> func.HttpResponse:
     # token = req.params.get("token", "No token found")
     token = req.headers.get("Authorization", "No token found").split(" ")[1]
@@ -106,7 +106,7 @@ async def kernel_invoke(req: func.HttpRequest) -> func.HttpResponse:
 
 
 @app.function_name(name="config")
-@app.route(route="config")  # HTTP Trigger
+@app.route(route="config", auth_level=func.AuthLevel.ANONYMOUS)  # HTTP Trigger
 def config(req: func.HttpRequest) -> func.HttpResponse:
     is_key_present = "Key is not present"
     if os.environ.get("AZURE_OPENAI_API_KEY", "") != "":
@@ -134,7 +134,7 @@ def config(req: func.HttpRequest) -> func.HttpResponse:
 
 
 @app.function_name(name="speech")
-@app.route(route="speech")  # HTTP Trigger
+@app.route(route="speech", auth_level=func.AuthLevel.ANONYMOUS)  # HTTP Trigger
 def test_function(req: func.HttpRequest) -> func.HttpResponse:
     logging.info("Python HTTP trigger function processed a request.")
 

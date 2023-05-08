@@ -34,7 +34,7 @@ jobs:
         env:
           REACT_APP_GRAPH_CLIENT_ID: "80ab9937-9af6-4f7f-a6fa-bda0cb2cffc1"
           REACT_APP_GRAPH_SCOPES: "Calendars.ReadWrite"
-          REACT_APP_FUNCTION_URI: "https://csunlsrskjarvis.azurewebsites.net"
+          REACT_APP_FUNCTION_URI: "https://csunlskhackathonai.azurewebsites.net"
           REDIRECT_URL: "https://ashy-flower-00b7ab103.2.azurestaticapps.net/"
 
   close_pull_request_job:
