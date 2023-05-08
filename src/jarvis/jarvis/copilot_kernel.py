@@ -4,13 +4,18 @@ from semantic_kernel.core_skills.time_skill import TimeSkill
 from skills.calendar_skill import CalendarSkill
 import json
 
-SKILLS_SUBDIRS = ['Classification', 'CalendarSkill',
+SKILLS_SUBDIRS = ['Classification', 'CalendarSemanticSkill',
                   'Chat', 'CookingSkill', 'AllInformationPresentSkill']
+
+ALLOWED_SKILLS = ["Classification", "Chat",
+                  "CookingSkill", "AllInformationPresentSkill", "calendar"]
 
 
 def init_kernel_with_functions(kernel: Kernel):
     # add core skills
     kernel.import_skill(TimeSkill(), "time")
+    kernel.import_skill(skill_instance=CalendarSkill(),
+                        skill_name="calendar")
 
     skill_directory_name = "./skills"
     # add semantic skills
@@ -19,7 +24,6 @@ def init_kernel_with_functions(kernel: Kernel):
             skill_directory_name, skill_dir)
 
     # add NativeXSemantic skills
-    kernel.import_skill(CalendarSkill(), "CalendarSkill")
 
 
 def get_all_skills(kernel: sk.Kernel):
@@ -29,6 +33,11 @@ def get_all_skills(kernel: sk.Kernel):
     available_skills = ""
 
     for skill_name, skill_functions in all_skills:
+
+        # skip the calendar semantic skill as these are part of the native skill
+        if skill_name not in ALLOWED_SKILLS:
+            continue
+
         available_skills += f"skill name: {skill_name}\n"
         for function in skill_functions:
             available_skills += f"  function name: {function.name}\n"

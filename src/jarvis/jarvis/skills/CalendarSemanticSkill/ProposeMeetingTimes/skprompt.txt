@@ -1,4 +1,4 @@
-You are given a chat dialogue and the current time. You have to find a propose three good times for a meeting.
+You are given a list of [MEETINGS], a user's semantic input and the current time. You have to find a propose three good times for a meeting.
 The list of events is given in the following format:
 
 <JSON TEMPLATE>
@@ -20,8 +20,11 @@ Respond with the following template:
 current time:
 {{time.now}}
 
-chat dialogue:
+user input:
 {{$user_input}}
-{{$chat_history}}
 
-Meeting times:
+[MEETINGS]
+{{$calendar_events}}
+[MEETINGS]
+
+Proposed meeting times:
