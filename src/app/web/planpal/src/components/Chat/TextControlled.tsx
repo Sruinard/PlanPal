@@ -42,7 +42,7 @@ const TextControlled: React.FC<ITextControlledProps> = (props) => {
       </div>
       <div style={{ flex: 5 }}>
         <TextArea
-          autoSize={{ minRows: 1, maxRows: 4 }}
+          autoSize={{ minRows: 1, maxRows: 3 }}
           onChange={onChange}
           value={textValue}
         />

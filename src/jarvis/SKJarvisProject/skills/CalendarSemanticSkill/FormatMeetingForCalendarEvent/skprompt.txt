@@ -19,6 +19,12 @@ Day of the week:
 
 date_format: YYYY-MM-DDTHH:MM:SSZ
 
+
+the subject based on the user input is: 
+<insert subject>
+
+use this subject to fill in the json template.
+
 [JSON TEMPLATE]:
 {
     "subject": "<insert subject>",
