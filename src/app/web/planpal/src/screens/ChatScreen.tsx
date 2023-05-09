@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import { Layout, Row } from "antd";
 import TextControlled from "../components/Chat/TextControlled";
 import VoiceControlled from "../components/Chat/VoiceControlled";
@@ -50,6 +50,7 @@ interface UserInput {
   email: string;
   message: string;
   user_input: string;
+  context: {};
 }
 
 const submitUserInput = async (userInput: UserInput, token: string) => {
@@ -84,6 +85,7 @@ const submitUserInput = async (userInput: UserInput, token: string) => {
 
 export default function ChatScreen(props: ChatScreenProps) {
   // const [skipCallDuringMount, setSkipCallDuringMount] = React.useState(true);
+  const bottomRef = useRef<null | HTMLDivElement>(null);
   const skipCallDuringMount = useRef(true);
   const [isVoiceControlled, setIsVoiceControlled] = React.useState(false);
   const [message, setMessage] = React.useState<IMessage>({
@@ -92,41 +94,54 @@ export default function ChatScreen(props: ChatScreenProps) {
   } as IMessage);
 
   const [messages, setMessages] = React.useState<IMessage[]>([]);
+  const [context, setContext] = React.useState({});
+
+  const fetchData = useCallback(async () => {
+    // function body here
+    // const res = await fetch("http://localhost:7071/api/ping");
+    // const data = await res.json();
+    console.log("====================");
+    console.log(props.accessToken);
+    const data = await submitUserInput(
+      {
+        name: "stef",
+        email: "s",
+        message: message.content,
+        user_input: message.content,
+        context: context,
+      },
+      props.accessToken
+    );
+
+    setContext({
+      context: data.context,
+    });
+    console.log(data.message);
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      message,
+      {
+        isUser: false,
+        content: data.message,
+      },
+    ]);
+  }, [message, setMessages, props.accessToken, context, setContext]);
 
   // create a post request with user_input in the body and add an authorization token as a header
-
   useEffect(() => {
-    const fetchData = async () => {
-      // const res = await fetch("http://localhost:7071/api/ping");
-      // const data = await res.json();
-      console.log("====================");
-      console.log(props.accessToken);
-      const data = await submitUserInput(
-        {
-          name: "stef",
-          email: "s",
-          message: message.content,
-          user_input: message.content,
-        },
-        props.accessToken
-      );
-      console.log(data.message);
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        message,
-        {
-          isUser: false,
-          content: data.message,
-        },
-      ]);
-    };
+    // const fetchData = async () => {};
     if (skipCallDuringMount.current) {
       skipCallDuringMount.current = false;
       return;
     } else {
       fetchData();
     }
-  }, [message, setMessages, skipCallDuringMount, props.accessToken]);
+  }, [message]);
+
+  useEffect(() => {
+    // 👇️ scroll to bottom every time messages change
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const onChangeSegmented = (key: string | number) => {
     console.log(key);
@@ -154,6 +169,7 @@ export default function ChatScreen(props: ChatScreenProps) {
               user={message.isUser ? "user" : "bot"}
             />
           ))}
+          <div ref={bottomRef} />
         </Content>
         <Footer style={footerStyle}>
           <Row

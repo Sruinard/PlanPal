@@ -83,7 +83,7 @@ const App = () => {
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div style={{ height: "100vh" }}>
       <UnauthenticatedTemplate>
         <HomeScreen
           isAuthenticated={isAuthenticated}

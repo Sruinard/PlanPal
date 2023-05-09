@@ -27,7 +27,6 @@ load_dotenv()
 
 kernel = ck.get_kernel()
 ck.init_kernel_with_functions(kernel)
-context = kernel.create_new_context()
 
 
 app = func.FunctionApp()
@@ -82,13 +81,22 @@ def ping_invoke(req: func.HttpRequest) -> func.HttpResponse:
 @app.function_name(name="jarvis")
 @app.route(route="kernel", auth_level=func.AuthLevel.ANONYMOUS)  # HTTP Trigger
 async def kernel_invoke(req: func.HttpRequest) -> func.HttpResponse:
+
+    context = kernel.create_new_context()
+
+
+    user_input = req.get_json().get("user_input", "No user input found")
+    old_context = req.get_json().get("context", {})
+    for key, value in old_context.items():
+        context.variables[key] = value
+
     # token = req.params.get("token", "No token found")
     token = req.headers.get("Authorization", "No token found").split(" ")[1]
     # get user input from body
     user_input = req.get_json().get("user_input", "No user input found")
     context.variables["token"] = token
     LOGGER.info(token)
-    answer, _ = await ck.chat(user_input=user_input, context=context)
+    answer, context = await ck.chat(user_input=user_input, context=context)
 
     headers = {
         "Access-Control-Allow-Origin": "*",
@@ -99,7 +107,7 @@ async def kernel_invoke(req: func.HttpRequest) -> func.HttpResponse:
 
     return func.HttpResponse(
         # json response openai
-        json.dumps({"message": answer}),
+        json.dumps({"message": answer, "context": context.variables._variables}),
         mimetype="application/json",
         headers=headers,
     )

@@ -20,6 +20,7 @@ const TextControlled: React.FC<ITextControlledProps> = (props) => {
   };
 
   const handleInput = () => {
+    setTextValue("");
     props.setMessage({
       content: textValue,
       isUser: true,
@@ -40,7 +41,11 @@ const TextControlled: React.FC<ITextControlledProps> = (props) => {
         {/* <Button type="primary" icon={<SendOutlined />} /> */}
       </div>
       <div style={{ flex: 5 }}>
-        <TextArea autoSize={{ minRows: 1, maxRows: 4 }} onChange={onChange} />
+        <TextArea
+          autoSize={{ minRows: 1, maxRows: 4 }}
+          onChange={onChange}
+          value={textValue}
+        />
       </div>
       <div style={{ flex: 1 }}>
         <Button type="primary" icon={<SendOutlined />} onClick={handleInput} />
