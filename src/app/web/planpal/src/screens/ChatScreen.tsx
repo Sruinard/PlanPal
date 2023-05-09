@@ -91,7 +91,8 @@ export default function ChatScreen(props: ChatScreenProps) {
   const skipCallDuringMount = useRef(true);
   const [isVoiceControlled, setIsVoiceControlled] = React.useState(false);
   const [message, setMessage] = React.useState<IMessage>({
-    content: "Hey, how are you?",
+    content:
+      "I've heard the app innovation team is having a hackathon and you are here to showcase what you can do... So tell me, what powers do you possess?",
     isUser: true,
   } as IMessage);
 
@@ -162,7 +163,7 @@ export default function ChatScreen(props: ChatScreenProps) {
               display: "flex",
             }}
           >
-            <h1 style={{ flex: 1 }}>PlanPal</h1>
+            <h1 style={{ flex: 1 }}>ClosedAI</h1>
             {process.env.REDIRECT_URL === "" && (
               <Button onClick={props.handleSignOut}>Sign out</Button>
             )}
@@ -170,7 +171,16 @@ export default function ChatScreen(props: ChatScreenProps) {
         </Header>
         <Content style={contentStyle}>
           {loading ? (
-            <Spin />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              <Spin size="large" />
+            </div>
           ) : (
             messages.map((message, index) => (
               <ChatItem
