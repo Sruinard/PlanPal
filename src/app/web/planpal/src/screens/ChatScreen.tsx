@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef } from "react";
 import { Layout, Row } from "antd";
 import TextControlled from "../components/Chat/TextControlled";
 import VoiceControlled from "../components/Chat/VoiceControlled";
@@ -96,47 +96,73 @@ export default function ChatScreen(props: ChatScreenProps) {
   const [messages, setMessages] = React.useState<IMessage[]>([]);
   const [context, setContext] = React.useState({});
 
-  const fetchData = useCallback(async () => {
-    // function body here
-    // const res = await fetch("http://localhost:7071/api/ping");
-    // const data = await res.json();
-    console.log("====================");
-    console.log(props.accessToken);
-    const data = await submitUserInput(
-      {
-        name: "stef",
-        email: "s",
-        message: message.content,
-        user_input: message.content,
-        context: context,
-      },
-      props.accessToken
-    );
+  // const fetchData = useCallback(async () => {
+  //   // function body here
+  //   // const res = await fetch("http://localhost:7071/api/ping");
+  //   // const data = await res.json();
+  //   console.log("====================");
+  //   console.log(props.accessToken);
+  //   const data = await submitUserInput(
+  //     {
+  //       name: "stef",
+  //       email: "s",
+  //       message: message.content,
+  //       user_input: message.content,
+  //       context: context,
+  //     },
+  //     props.accessToken
+  //   );
 
-    setContext({
-      context: data.context,
-    });
-    console.log(data.message);
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      message,
-      {
-        isUser: false,
-        content: data.message,
-      },
-    ]);
-  }, [message, setMessages, props.accessToken, context, setContext]);
+  //   setContext({
+  //     context: data.context,
+  //   });
+  //   console.log(data.message);
+  //   setMessages((prevMessages) => [
+  //     ...prevMessages,
+  //     message,
+  //     {
+  //       isUser: false,
+  //       content: data.message,
+  //     },
+  //   ]);
+  // }, [message, setMessages, props.accessToken, context, setContext]);
 
   // create a post request with user_input in the body and add an authorization token as a header
   useEffect(() => {
-    // const fetchData = async () => {};
+    const fetchData = async () => {
+      console.log("====================");
+      console.log(props.accessToken);
+      const data = await submitUserInput(
+        {
+          name: "stef",
+          email: "s",
+          message: message.content,
+          user_input: message.content,
+          context: context,
+        },
+        props.accessToken
+      );
+
+      setContext({
+        context: data.context,
+      });
+      console.log(data.message);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        message,
+        {
+          isUser: false,
+          content: data.message,
+        },
+      ]);
+    };
     if (skipCallDuringMount.current) {
       skipCallDuringMount.current = false;
       return;
     } else {
       fetchData();
     }
-  }, [message]);
+  }, [message]); //eslint-disable-line
 
   useEffect(() => {
     // 👇️ scroll to bottom every time messages change
