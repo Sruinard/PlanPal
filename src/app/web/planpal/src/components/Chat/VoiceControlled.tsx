@@ -13,7 +13,9 @@ interface IVoiceControlledProps {
 
 const getTokenOrRefresh = async () => {
   // fetch GET http://localhost:7071/api/speech
-  const tokenRes = await fetch("http://localhost:7071/api/speech");
+  const tokenRes = await fetch(
+    `${process.env.REACT_APP_FUNCTION_URI}/api/speech`
+  );
   const tokenObj = await tokenRes.json();
 
   let returnObject = {

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Layout, Row } from "antd";
+import { Layout, Row, Spin } from "antd";
 import TextControlled from "../components/Chat/TextControlled";
 import VoiceControlled from "../components/Chat/VoiceControlled";
 import { Segmented } from "antd";
@@ -86,6 +86,7 @@ const submitUserInput = async (userInput: UserInput, token: string) => {
 
 export default function ChatScreen(props: ChatScreenProps) {
   // const [skipCallDuringMount, setSkipCallDuringMount] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
   const bottomRef = useRef<null | HTMLDivElement>(null);
   const skipCallDuringMount = useRef(true);
   const [isVoiceControlled, setIsVoiceControlled] = React.useState(false);
@@ -99,40 +100,10 @@ export default function ChatScreen(props: ChatScreenProps) {
     context: {},
   });
 
-  // const fetchData = useCallback(async () => {
-  //   // function body here
-  //   // const res = await fetch("http://localhost:7071/api/ping");
-  //   // const data = await res.json();
-  //   console.log("====================");
-  //   console.log(props.accessToken);
-  //   const data = await submitUserInput(
-  //     {
-  //       name: "stef",
-  //       email: "s",
-  //       message: message.content,
-  //       user_input: message.content,
-  //       context: context,
-  //     },
-  //     props.accessToken
-  //   );
-
-  //   setContext({
-  //     context: data.context,
-  //   });
-  //   console.log(data.message);
-  //   setMessages((prevMessages) => [
-  //     ...prevMessages,
-  //     message,
-  //     {
-  //       isUser: false,
-  //       content: data.message,
-  //     },
-  //   ]);
-  // }, [message, setMessages, props.accessToken, context, setContext]);
-
   // create a post request with user_input in the body and add an authorization token as a header
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       console.log("====================");
       console.log(props.accessToken);
       const data = await submitUserInput(
@@ -158,6 +129,7 @@ export default function ChatScreen(props: ChatScreenProps) {
           content: data.message,
         },
       ]);
+      setLoading(false);
     };
     if (skipCallDuringMount.current) {
       skipCallDuringMount.current = false;
@@ -197,14 +169,19 @@ export default function ChatScreen(props: ChatScreenProps) {
           </Row>
         </Header>
         <Content style={contentStyle}>
-          {messages.map((message, index) => (
-            <ChatItem
-              key={index}
-              message={message}
-              isMine={message.isUser}
-              user={message.isUser ? "user" : "bot"}
-            />
-          ))}
+          {loading ? (
+            <Spin />
+          ) : (
+            messages.map((message, index) => (
+              <ChatItem
+                key={index}
+                message={message}
+                isMine={message.isUser}
+                user={message.isUser ? "user" : "bot"}
+              />
+            ))
+          )}
+
           <div ref={bottomRef} />
         </Content>
         <Footer style={footerStyle}>
