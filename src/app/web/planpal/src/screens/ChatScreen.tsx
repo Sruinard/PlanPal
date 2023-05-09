@@ -94,7 +94,9 @@ export default function ChatScreen(props: ChatScreenProps) {
   } as IMessage);
 
   const [messages, setMessages] = React.useState<IMessage[]>([]);
-  const [context, setContext] = React.useState({});
+  const [context, setContext] = React.useState({
+    context: {},
+  });
 
   // const fetchData = useCallback(async () => {
   //   // function body here
@@ -138,7 +140,7 @@ export default function ChatScreen(props: ChatScreenProps) {
           email: "s",
           message: message.content,
           user_input: message.content,
-          context: context,
+          context: context.context,
         },
         props.accessToken
       );

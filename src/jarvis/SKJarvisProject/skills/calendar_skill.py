@@ -16,7 +16,7 @@ class CalendarSkill:
         print("Creating filter...")
         event_func = context.skills.get_function(
             "CalendarSemanticSkill", "SemanticTimeToGraphFilter")
-        filters = await event_func.invoke_with_vars_async(input=context.variables)
+        filters = await event_func.invoke_async(input=context.variables)
         filters = json.loads(filters.result)
         print(f"filters: {filters}")
 
@@ -49,7 +49,7 @@ class CalendarSkill:
         context.variables["calendar_events"] = formatted_events
         event_func = context.skills.get_function(
             "CalendarSemanticSkill", "ProposeMeetingTimes")
-        suitable_meeting_times = await event_func.invoke_with_vars_async(input=context.variables)
+        suitable_meeting_times = await event_func.invoke_async(input=context.variables)
         return suitable_meeting_times.result
 
     @sk_function(description="run this function if a user asks to create a meeting in the user's calendar.")
@@ -61,7 +61,7 @@ class CalendarSkill:
 
         print(f"formatting meeting results...")
         for n_tries in range(3):
-            meeting = await format_meeting_func.invoke_with_vars_async(input=context.variables)
+            meeting = await format_meeting_func.invoke_async(input=context.variables)
             try:
                 print(f"Trying for times: {n_tries}. result: {meeting.result}")
                 context.variables["chat_history"] += meeting.result
