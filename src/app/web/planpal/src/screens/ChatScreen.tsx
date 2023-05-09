@@ -15,7 +15,8 @@ const headerStyle: React.CSSProperties = {
   height: 64,
   paddingInline: 50,
   lineHeight: "64px",
-  backgroundColor: "#7dbcea",
+  backgroundColor: "#ffffff",
+  // borderBottom: "1px solid #9fa3a6",
 };
 
 const contentStyle: React.CSSProperties = {
@@ -183,9 +184,16 @@ export default function ChatScreen(props: ChatScreenProps) {
     <div style={{ maxHeight: "100vh" }}>
       <Layout>
         <Header style={headerStyle}>
-          <Row>
-            <h1>PlanPal</h1>
-            <Button onClick={props.handleSignOut}>Sign out</Button>
+          <Row
+            style={{
+              alignItems: "center",
+              display: "flex",
+            }}
+          >
+            <h1 style={{ flex: 1 }}>PlanPal</h1>
+            {process.env.REDIRECT_URL === "" && (
+              <Button onClick={props.handleSignOut}>Sign out</Button>
+            )}
           </Row>
         </Header>
         <Content style={contentStyle}>

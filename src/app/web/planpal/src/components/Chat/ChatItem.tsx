@@ -2,11 +2,6 @@ import React from "react";
 import { Card, Avatar } from "antd";
 
 // chat item
-import {
-  EditOutlined,
-  EllipsisOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
 import { IMessage } from "./MessageHistory";
 
 const { Meta } = Card;
@@ -25,15 +20,15 @@ const ChatItem: React.FC<ChatItemProps> = ({
   const { content } = message;
   return (
     <Card
-      actions={[
-        <SettingOutlined key="setting" />,
-        <EditOutlined key="edit" />,
-        <EllipsisOutlined key="ellipsis" />,
-      ]}
+      // actions={[
+      //   <SettingOutlined key="setting" />,
+      //   <EditOutlined key="edit" />,
+      //   <EllipsisOutlined key="ellipsis" />,
+      // ]}
       style={{
         width: 300,
         alignSelf: isMine ? "flex-end" : "flex-start",
-        backgroundColor: isMine ? "#7dbcea" : "#ffffff",
+        backgroundColor: isMine ? "#ebebeb" : "#ffffff",
         margin: 10,
       }}
     >
