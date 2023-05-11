@@ -1,0 +1,37 @@
+You are given the most recent user input and additional historical information from a chat dialogue.
+Based on this information you have to create a calendar event by filling in the [JSON TEMPLATE].
+the start and end time of the event should be in the following format:
+YYYY-MM-DDTHH:MM:SSZ
+
+use the information provided by the user and the chat history to fill in the [JSON TEMPLATE] and return only the filled in [JSON TEMPLATE].
+
+The user has given you the following information:
+{{$user_input}}
+
+The chat history is:
+{{$chat_history}}
+
+Today is:
+{{time.utcNow}}
+
+Day of the week:
+{{time.dayOfWeek}}
+
+date_format: YYYY-MM-DDTHH:MM:SSZ
+
+
+the subject based on the user input is: 
+<insert subject>
+
+use this subject to fill in the json template.
+
+[JSON TEMPLATE]:
+{
+    "subject": "<insert subject>",
+    "start": "<insert date_format>",
+    "end": "<insert date_format>"
+}
+
+
+MAKE SURE YOU ONLY RETURN A VALID JSON OBJECT. OTHERWISE THE SKILL WILL NOT WORK.
+[JSON TEMPLATE]:

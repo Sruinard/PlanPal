@@ -1,0 +1,27 @@
+You are given the most recent user input and additional historical information from a chat dialogue.
+You have to extract the date and time of the proposed meeting and format it using the following format:
+YYYY-MM-DDTHH:MM:SSZ
+
+The user has given you the following information:
+{{$user_input}}
+
+The chat history is:
+{{$chat_history}}
+
+Today is:
+{{time.utcNow}}
+
+Day of the week:
+{{time.dayOfWeek}}
+
+USE THE FOLLOWING TEMPLATE TO ANSWER:
+[START OF TEMPLATE]
+start_time: YYYY-MM-DDTHH:MM:SSZ
+end_time: YYYY-MM-DDTHH:MM:SSZ
+[END OF TEMPLATE]
+
+YOU HAVE TO
+- Return the TEMPLATE and only the TEMPLATE with the correct date and time and present it as the answer
+
+RETURN THE START TIME IN THE SPECIFIED FORMAT AND THE END TIME IN THE SPECIFIED FORMAT
+[START OF ANSWER]

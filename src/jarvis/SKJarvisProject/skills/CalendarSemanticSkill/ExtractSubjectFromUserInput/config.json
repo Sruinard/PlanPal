@@ -1,9 +1,9 @@
 {
     "schema": 1,
     "type": "completion",
-    "description": "Formats the chat information as a json object which can be used by our API to add a new calendar event.",
+    "description": "Extract start and end time of meeting from user input and chat history",
     "completion": {
-      "max_tokens": 2048,
+      "max_tokens": 1024,
       "temperature": 0.0,
       "top_p": 1.0,
       "presence_penalty": 0.0,

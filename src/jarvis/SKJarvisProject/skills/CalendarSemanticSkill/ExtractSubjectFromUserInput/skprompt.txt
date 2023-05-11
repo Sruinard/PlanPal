@@ -1,0 +1,9 @@
+Create an email subject based on the user's input.
+You can be creative.
+Don't include times in the subject.
+FOCUS ON WHAT THE MEETING IS ABOUT!
+
+The user has given you the following information:
+{{$user_input}}
+
+The email subject should be:

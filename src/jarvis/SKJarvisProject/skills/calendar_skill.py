@@ -56,12 +56,26 @@ class CalendarSkill:
     @sk_function_context_parameter(name="user_input", description="The user input")
     @sk_function_context_parameter(name="chat_history", description="The historical dialogue between the chatbot and the user.")
     async def create_calendar_event(self, context: sk.SKContext) -> str:
+
+        start_and_end_func = context.skills.get_function("CalendarSemanticSkill", "ExtractStartAndEndTimeFromUserInput")
+        start_and_end = await start_and_end_func.invoke_async(context=context)
+        print(f"start and end: {start_and_end.result}")
+        context.variables["start_and_end_time"] = start_and_end.result
+
+        subject_func = context.skills.get_function("CalendarSemanticSkill", "ExtractSubjectFromUserInput")
+        subject = await subject_func.invoke_async(context=context)
+        print(f"subject: {subject.result}")
+        context.variables["email_subject"] = subject.result
+
         format_meeting_func = context.skills.get_function(
             "CalendarSemanticSkill", "FormatMeetingForCalendarEvent")
-
+        print("-------------------------")
+        print(f"start_and_end: {context.variables['start_and_end_time']}")
+        print(f"subject: {context.variables['email_subject']}")
+        print("-------------------------")
         print(f"formatting meeting results...")
         for n_tries in range(3):
-            meeting = await format_meeting_func.invoke_async(input=context.variables)
+            meeting = await format_meeting_func.invoke_async(variables=context.variables)
             try:
                 print(f"Trying for times: {n_tries}. result: {meeting.result}")
                 context.variables["chat_history"] += meeting.result
@@ -97,7 +111,7 @@ class CalendarSkill:
             print(created_meeting)
             formatted_meeting = {}
 
-        return f"Created the following meeting: {json.dumps(formatted_meeting)}"
+        return f"I have created a meeting with the following information: {json.dumps(formatted_meeting)}"
 
     @staticmethod
     def create_graph_event(meeting):
