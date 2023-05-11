@@ -83,7 +83,12 @@ const App = () => {
   };
 
   return (
-    <div style={{ height: "100vh" }}>
+    <div
+      style={{
+        display: "flex",
+        maxHeight: "-webkit-fill-available",
+      }}
+    >
       <UnauthenticatedTemplate>
         <HomeScreen
           isAuthenticated={isAuthenticated}

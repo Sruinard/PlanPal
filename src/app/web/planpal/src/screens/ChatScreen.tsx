@@ -154,78 +154,76 @@ export default function ChatScreen(props: ChatScreenProps) {
     }
   };
   return (
-    <div style={{ maxHeight: "100vh" }}>
-      <Layout>
-        <Header style={headerStyle}>
-          <Row
-            style={{
-              alignItems: "center",
-              display: "flex",
-            }}
-          >
-            <h1 style={{ flex: 1 }}>ClosedAI</h1>
-            {process.env.REDIRECT_URL === "" && (
-              <Button onClick={props.handleSignOut}>Sign out</Button>
-            )}
-          </Row>
-        </Header>
-        <Content style={contentStyle}>
-          {loading ? (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100%",
-              }}
-            >
-              <Spin size="large" />
-            </div>
-          ) : (
-            messages.map((message, index) => (
-              <ChatItem
-                key={index}
-                message={message}
-                isMine={message.isUser}
-                user={message.isUser ? "user" : "bot"}
-              />
-            ))
+    <Layout style={{ flex: 1 }}>
+      <Header style={headerStyle}>
+        <Row
+          style={{
+            alignItems: "center",
+            display: "flex",
+          }}
+        >
+          <h1 style={{ flex: 1 }}>ClosedAI</h1>
+          {process.env.REDIRECT_URL === "" && (
+            <Button onClick={props.handleSignOut}>Sign out</Button>
           )}
-
-          <div ref={bottomRef} />
-        </Content>
-        <Footer style={footerStyle}>
-          <Row
+        </Row>
+      </Header>
+      <Content style={contentStyle}>
+        {loading ? (
+          <div
             style={{
-              flex: 1,
+              display: "flex",
               justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
             }}
           >
-            <Segmented
-              onChange={onChangeSegmented}
-              options={[
-                {
-                  label: "text",
-                  value: "text",
-                  icon: <CommentOutlined />,
-                },
-                {
-                  label: "speech",
-                  value: "speech",
-                  icon: <AudioOutlined />,
-                },
-              ]}
+            <Spin size="large" />
+          </div>
+        ) : (
+          messages.map((message, index) => (
+            <ChatItem
+              key={index}
+              message={message}
+              isMine={message.isUser}
+              user={message.isUser ? "user" : "bot"}
             />
-          </Row>
-          <Row style={{ flex: 4 }}>
-            {isVoiceControlled ? (
-              <VoiceControlled setMessage={setMessage} />
-            ) : (
-              <TextControlled setMessage={setMessage} />
-            )}
-          </Row>
-        </Footer>
-      </Layout>
-    </div>
+          ))
+        )}
+
+        <div ref={bottomRef} />
+      </Content>
+      <Footer style={footerStyle}>
+        <Row
+          style={{
+            flex: 1,
+            justifyContent: "center",
+          }}
+        >
+          <Segmented
+            onChange={onChangeSegmented}
+            options={[
+              {
+                label: "text",
+                value: "text",
+                icon: <CommentOutlined />,
+              },
+              {
+                label: "speech",
+                value: "speech",
+                icon: <AudioOutlined />,
+              },
+            ]}
+          />
+        </Row>
+        <Row style={{ flex: 4 }}>
+          {isVoiceControlled ? (
+            <VoiceControlled setMessage={setMessage} />
+          ) : (
+            <TextControlled setMessage={setMessage} />
+          )}
+        </Row>
+      </Footer>
+    </Layout>
   );
 }
